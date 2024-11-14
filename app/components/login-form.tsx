@@ -6,6 +6,7 @@ import { login } from "@/lib/actions";
 
 const LoginForm = () => {
   const [data, handleSubmit, isPending ] = useActionState(login,null )
+  console.log(data)
 
   return (
     <form action={handleSubmit}>

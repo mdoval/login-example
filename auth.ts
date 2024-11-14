@@ -1,23 +1,12 @@
-import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import { signInSchema } from "./schema/siginSchema";
-import { saltAndHashPassword } from ""
+import NextAuth from "next-auth"
+import authConfig from "./auth.config"
+ 
+import { PrismaClient } from "@prisma/client"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { db } from "./lib/db"
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [
-    Credentials({
-      credentials: {
-        email: {},
-        password: {},
-      },
-      authorize: async (credentials)  => {
-        try {
-          let user = null
-          const { email, password} = await signInSchema.parseAsync(credentials)
-
-          const pwHash = 
-        }
-      }
-    }),
-  ],
-});
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(db),
+  ...authConfig,
+  session: { strategy: "jwt" },
+})

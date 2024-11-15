@@ -4,15 +4,9 @@ import React, { useActionState } from "react";
 import Alert from "./alert";
 import { register } from "@/lib/actions";
 import RegisterButton from "./register-button";
-import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
   const [data, handleSubmit, isPending ] = useActionState(register,null )
-  const router = useRouter()
-
-  if(data?.success) {
-    router.push('/login')
-  }
 
   return (
     <form action={handleSubmit}>

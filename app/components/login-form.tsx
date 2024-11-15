@@ -4,15 +4,9 @@ import React, { useActionState } from "react";
 import LoginButton from "./login-button";
 import { login } from "@/lib/actions";
 import Alert from "./alert";
-import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [data, handleSubmit, isPending ] = useActionState(login,null )
-  const router = useRouter()
-
-  if(data?.success) {
-    router.push('dashboard')
-  }
 
   return (
     <form action={handleSubmit}>

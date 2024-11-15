@@ -6,7 +6,7 @@ import React from "react";
 const LogoutButton = () => {
 
   const handleLogout = async () => {
-    await signOut(/*{redirect: true }*/)
+    await signOut({redirectTo: "/"})
   }
 
   return (

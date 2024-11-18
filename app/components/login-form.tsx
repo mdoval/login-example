@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useActionState } from "react";
-import LoginButton from "./login-button";
+import SigninButton from "./signin-button";
 import { login } from "@/lib/actions";
 import Alert from "./alert";
 
@@ -45,7 +45,7 @@ const LoginForm = () => {
           </div>
         </label>
         {data?.error? <Alert mensaje={data.error} tipo="error" /> : ""}        
-        <LoginButton />
+        <SigninButton />
       </div>
     </form>
   );

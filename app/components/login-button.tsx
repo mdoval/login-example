@@ -1,10 +1,11 @@
 'use client'
 
+import Link from 'next/link'
 import React from 'react'
 
 const LoginButton = () => {
   return (
-    <button type='submit' className='btn btn-primary'>Ingresar</button>
+    <Link className="btn btn-primary" href={"/login"}>Login</Link>
   )
 }
 

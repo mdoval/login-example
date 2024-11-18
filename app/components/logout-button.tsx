@@ -10,7 +10,7 @@ const LogoutButton = () => {
   }
 
   return (
-    <button className="btn btn-primary" onClick={handleLogout}>Cerrar Sesion</button>
+    <button onClick={handleLogout}>Cerrar Sesion</button>
   );
 };
 

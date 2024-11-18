@@ -30,7 +30,7 @@ export async function login(prevState: unknown | null, formData: FormData) {
     }
     return { error: "Error 500" }
   }
-  redirect('/dashboard')
+  //redirect('/dashboard')
 }
 
 export async function register(prevState: unknown | null, formData: FormData) {

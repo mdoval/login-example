@@ -1,17 +1,26 @@
-import LogoutButton from "@/app/components/logout-button"
-import { auth } from "@/auth"
- 
+import LogoutButton from "@/app/components/logout-button";
+import { auth } from "@/auth";
+
 export default async function DashboardPage() {
-  const session = await auth()
- 
+  const session = await auth();
+
   if (!session) {
-    return <div>Not authenticated</div>
+    return <div>Usuario no autorizado para ver esta seccion</div>;
   }
- 
-  return (
-    <div className="container">
-      <pre>{JSON.stringify(session, null, 2)}</pre>
-      <LogoutButton />
-    </div>
-  )
+
+  if (session.user.role === "admin") {
+    return (
+      <div className="container">
+        <pre>{JSON.stringify(session, null, 2)}</pre>
+        <LogoutButton />
+      </div>
+    );
+  } else {
+    return (
+      <div className="container">
+        <h1>Usuario no es administrador</h1>
+        <LogoutButton />
+      </div>
+    );
+  }
 }

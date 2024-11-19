@@ -22,15 +22,13 @@ export async function login(prevState: unknown | null, formData: FormData) {
       };
     }
     await signIn("credentials", { ...result.data, ...{ redirect: false } });
-    //return { success: true }
-    //redirect('/dashboard')
   } catch (error) {
     if(error instanceof AuthError) {
       return { error: error.cause?.err?.message }      
     }
     return { error: "Error 500" }
   }
-  //redirect('/dashboard')
+  redirect('/dashboard')
 }
 
 export async function register(prevState: unknown | null, formData: FormData) {

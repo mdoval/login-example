@@ -2,7 +2,9 @@ import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { loginSchema } from "./schema/authSchema";
 import { db } from "./lib/db";
-import bcrypt from 'bcryptjs'
+import bcrypt from "bcryptjs";
+import { verify } from "crypto";
+import { nanoid } from "nanoid";
 
 // Notice this is only an object, not a full Auth.js instance
 export default {
@@ -15,7 +17,7 @@ export default {
         password: {},
       },
       authorize: async (credentials) => {
-        const {data, success} = loginSchema.safeParse(credentials)
+        const { data, success } = loginSchema.safeParse(credentials);
 
         if (!success) {
           throw new Error("Credenciales invalidas");
@@ -23,22 +25,50 @@ export default {
         // Verificar si usuario existe en la DB
         const user = await db.user.findFirst({
           where: {
-            email: data.email
-          }
-        })
+            email: data.email,
+          },
+        });
 
-        if(!user || !user.password ) {
-          throw new Error("No user found")
+        if (!user || !user.password) {
+          throw new Error("No user found");
         }
         // Verificar si la contraseña es correcta
-        const isValid = await bcrypt.compare(data.password, user.password)
+        const isValid = await bcrypt.compare(data.password, user.password);
 
-        if(!isValid) {
-          throw new Error("Incorrect Password")
+        if (!isValid) {
+          throw new Error("Incorrect Password");
         }
 
-        return user
+        //   Verificacion de Token
+        if (!user.emailVerified) {
+          const verifyTokenExist = await db.verificationToken.findFirst({
+            where: {
+              identifier: user.email,
+            },
+          });
+          // Si existe el token lo eliminamos
+          if (verifyTokenExist?.identifier) {
+            await db.verificationToken.delete({
+              where: {
+                identifier: user.email
+              }
+            })
+          }
+          const token = nanoid()
+          await db.verificationToken.create({
+            data: {
+              identifier: user.email,
+              token,
+              expires: new Date(Date.now(), + 1000 * 60 * 60 * 24)
+            }
+          })
+
+          //Envia email de validacion
+          throw new Error("Email sent verification")
+        }
+
+        return user;
       },
     }),
-  ],  
+  ],
 } satisfies NextAuthConfig;

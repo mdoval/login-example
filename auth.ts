@@ -20,7 +20,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return token;
     },
-
     //session() se utiliza para agregar la informacion del token a la sesion  del usuario
     // lo que hace que este disponible en el cliente.
      session({ session, token }) {
@@ -28,5 +27,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.role = token.role 
       return session
     },
+    authorized: async ({auth}) =>{
+      return !!auth
+    }
   },
 });

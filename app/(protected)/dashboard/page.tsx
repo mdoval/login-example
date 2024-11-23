@@ -2,7 +2,7 @@ import LogoutButton from "@/app/components/logout-button";
 import { auth } from "@/auth";
 
 export default async function DashboardPage() {
-  const session = await auth();
+  /*const session = await auth();
 
   if (!session) {
     return <div>Usuario no autorizado para ver esta seccion</div>;
@@ -22,5 +22,10 @@ export default async function DashboardPage() {
         <LogoutButton />
       </div>
     );
-  }
+  }*/
+ return(
+  <div>
+    <h1>Pagina Dashboard</h1>
+  </div>
+ )
 }

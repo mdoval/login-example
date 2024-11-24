@@ -5,6 +5,7 @@ import { db } from "./lib/db";
 import bcrypt from "bcryptjs";
 import { verify } from "crypto";
 import { nanoid } from "nanoid";
+import { sendEmailVerification } from "./lib/mail";
 
 // Notice this is only an object, not a full Auth.js instance
 export default {
@@ -46,6 +47,7 @@ export default {
               identifier: user.email,
             },
           });
+
           // Si existe el token lo eliminamos
           if (verifyTokenExist?.identifier) {
             await db.verificationToken.delete({
@@ -54,19 +56,22 @@ export default {
               }
             })
           }
+
           const token = nanoid()
+          
           await db.verificationToken.create({
             data: {
               identifier: user.email,
               token,
-              expires: new Date(Date.now(), + 1000 * 60 * 60 * 24)
+              expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
             }
           })
 
           //Envia email de validacion
+          await sendEmailVerification(user.email, token);
+
           throw new Error("Email sent verification")
         }
-
         return user;
       },
     }),
